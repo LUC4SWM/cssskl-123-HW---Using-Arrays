@@ -39,3 +39,20 @@ plt.tick_params(direction='in', axis='both', which='both')
 plt.legend(loc='best')
 plt.savefig('HW2 Task 2 Plot')
 plt.close()
+
+#Task 3:
+def num_days_big_percent_chg(stock_idx, percent):
+    """
+    Calculate the number of trading days when the magnitude of percent change since the previous day is greater than
+    the given percent.
+
+    :param stock_idx: A 1-D array containing the values for stock indices. :type stock_idx: numpy.ndarray :param
+    percent: A number that represents the threshold percentage change. :type percent: float :return num_days: The
+    total number of trading days when the magnitude of percent change exceeded the given percentage. :rtype: int
+
+    """
+    percent_changes = np.abs((stock_idx[1:] - stock_idx[:-1] / stock_idx[:-1]) * 100)
+    exceeds_threshold = percent_changes > percent
+    num_days = np.sum(exceeds_threshold)
+    return num_days
+
