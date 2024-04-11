@@ -1,3 +1,18 @@
+"""
+This file contains functions for analyzing and visualizing stock index data.
+
+Functions:
+- percent_of_mean(stock_idx): Calculate the percentage of each stock index relative to the mean of indices.
+- num_days_big_percent_chg(stock_idx, percent): Calculate the number of days with a big percentage change.
+- moving_average(stock_idx): Calculate the 3-day simple moving average of a stock index.
+- plot_template(indices): Set up a template for plotting stock index data with a three-day moving average.
+
+Constants:
+- STOCKS_NASDAQ: NASDAQ stock index data.
+- STOCKS_SP_: S&P 500 stock index data.
+- DJIA: Dow Jones Industrial Average stock index data.
+- DAYS: Trading days since June 1, 2016.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 
