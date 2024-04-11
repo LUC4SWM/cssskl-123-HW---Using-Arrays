@@ -1,5 +1,8 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import scipy as sp
+
+import stocks
 
 
 # Task 1:
@@ -24,3 +27,15 @@ def percent_of_mean(stock_idx):
     return percent_vals
 
 
+# Task 2:
+plt.plot(stocks.trading_days, percent_of_mean(stocks.djia), label="DJIA", color='blue')
+plt.plot(stocks.trading_days, percent_of_mean(stocks.sp500), label="S&P500", color='green')
+plt.plot(stocks.trading_days, percent_of_mean(stocks.nasdaq), label="NASDAQ", color='red')
+plt.xlabel("Trading Days since Jun 1, 2016")
+plt.ylabel("Percent of Mean")
+plt.xlim(left=0, right=70)
+plt.ylim(bottom=90, top=106)
+plt.tick_params(direction='in', axis='both', which='both')
+plt.legend(loc='best')
+plt.savefig('HW2 Task 2 Plot')
+plt.close()
