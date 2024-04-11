@@ -40,19 +40,40 @@ plt.legend(loc='best')
 plt.savefig('HW2 Task 2 Plot')
 plt.close()
 
-#Task 3:
+
+# Task 3:
 def num_days_big_percent_chg(stock_idx, percent):
     """
     Calculate the number of trading days when the magnitude of percent change since the previous day is greater than
     the given percent.
 
-    :param stock_idx: A 1-D array containing the values for stock indices. :type stock_idx: numpy.ndarray :param
-    percent: A number that represents the threshold percentage change. :type percent: float :return num_days: The
+    :param stock_idx: A 1-D array containing the values for stock indices. :type stock_idx: numpy.ndarray
+    :param percent: A number that represents the threshold percentage change. :type percent: float :return num_days: The
     total number of trading days when the magnitude of percent change exceeded the given percentage. :rtype: int
 
     """
-    percent_changes = np.abs((stock_idx[1:] - stock_idx[:-1] / stock_idx[:-1]) * 100)
-    exceeds_threshold = percent_changes > percent
-    num_days = np.sum(exceeds_threshold)
+    stock_idx = np.array(stock_idx)
+    percent_changes = np.abs((stock_idx[1:] - stock_idx[:-1]) / stock_idx[:-1]) * 100
+    num_days = np.sum(percent_changes > percent)
     return num_days
+
+# Task 4:
+pct_chg_thresholds = [0.2, 0.4, 0.6, 0.8, 1.0]
+djia_pct_chg_days = []
+sp500_pct_chg_days = []
+nasdaq_pct_chg_days = []
+for pct in pct_chg_thresholds:
+    djia_pct_chg_days.append(num_days_big_percent_chg(stocks.djia, pct))
+    sp500_pct_chg_days.append(num_days_big_percent_chg(stocks.sp500, pct))
+    nasdaq_pct_chg_days.append(num_days_big_percent_chg(stocks.nasdaq, pct))
+plt.plot(pct_chg_thresholds, djia_pct_chg_days, color='blue', label='DJIA')
+plt.plot(pct_chg_thresholds, sp500_pct_chg_days, color='green', label='S&P 500')
+plt.plot(pct_chg_thresholds, nasdaq_pct_chg_days, color='red', label='NASDAQ')
+plt.xlabel('Percentage Change Threshold Magnitude')
+plt.ylabel('Number of Days')
+plt.xlim(left=0.2, right=1.0)
+plt.ylim(bottom=5, top=50)
+plt.legend(loc='best')
+plt.savefig('HW2 Task 4 Plot')
+plt.close()
 
