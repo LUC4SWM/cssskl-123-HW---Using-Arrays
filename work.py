@@ -4,6 +4,14 @@ import scipy as sp
 
 import stocks
 
+STOCKS_NASDAQ = stocks.nasdaq
+
+STOCKS_SP_ = stocks.sp500
+
+DJIA = stocks.djia
+
+DAYS = stocks.trading_days
+
 
 # Task 1:
 def percent_of_mean(stock_idx):
@@ -28,9 +36,9 @@ def percent_of_mean(stock_idx):
 
 
 # Task 2:
-plt.plot(stocks.trading_days, percent_of_mean(stocks.djia), label="DJIA", color='blue')
-plt.plot(stocks.trading_days, percent_of_mean(stocks.sp500), label="S&P500", color='green')
-plt.plot(stocks.trading_days, percent_of_mean(stocks.nasdaq), label="NASDAQ", color='red')
+plt.plot(DAYS, percent_of_mean(DJIA), label="DJIA", color='blue')
+plt.plot(DAYS, percent_of_mean(STOCKS_SP_), label="S&P500", color='green')
+plt.plot(DAYS, percent_of_mean(STOCKS_NASDAQ), label="NASDAQ", color='red')
 plt.xlabel("Trading Days since Jun 1, 2016")
 plt.ylabel("Percent of Mean")
 plt.xlim(left=0, right=70)
@@ -47,9 +55,13 @@ def num_days_big_percent_chg(stock_idx, percent):
     Calculate the number of trading days when the magnitude of percent change since the previous day is greater than
     the given percent.
 
-    :param stock_idx: A 1-D array containing the values for stock indices. :type stock_idx: numpy.ndarray
-    :param percent: A number that represents the threshold percentage change. :type percent: float :return num_days: The
-    total number of trading days when the magnitude of percent change exceeded the given percentage. :rtype: int
+    :param stock_idx: A 1-D array containing the values for stock indices.
+    :type stock_idx: numpy.ndarray
+    :param percent: A number that represents the threshold percentage change.
+    :type percent: float
+    :return num_days: The
+    total number of trading days when the magnitude of percent change exceeded the given percentage.
+    :rtype: int
 
     """
     stock_idx = np.array(stock_idx)
@@ -63,9 +75,9 @@ djia_pct_chg_days = []
 sp500_pct_chg_days = []
 nasdaq_pct_chg_days = []
 for pct in pct_chg_thresholds:
-    djia_pct_chg_days.append(num_days_big_percent_chg(stocks.djia, pct))
-    sp500_pct_chg_days.append(num_days_big_percent_chg(stocks.sp500, pct))
-    nasdaq_pct_chg_days.append(num_days_big_percent_chg(stocks.nasdaq, pct))
+    djia_pct_chg_days.append(num_days_big_percent_chg(DJIA, pct))
+    sp500_pct_chg_days.append(num_days_big_percent_chg(STOCKS_SP_, pct))
+    nasdaq_pct_chg_days.append(num_days_big_percent_chg(STOCKS_NASDAQ, pct))
 plt.plot(pct_chg_thresholds, djia_pct_chg_days, color='blue', label='DJIA')
 plt.plot(pct_chg_thresholds, sp500_pct_chg_days, color='green', label='S&P 500')
 plt.plot(pct_chg_thresholds, nasdaq_pct_chg_days, color='red', label='NASDAQ')
@@ -76,4 +88,61 @@ plt.ylim(bottom=5, top=50)
 plt.legend(loc='best')
 plt.savefig('HW2 Task 4 Plot')
 plt.close()
+
+# Task 5:
+def moving_average(stock_idx):
+    """
+    Generates a 1-D array containing the 3-day simple moving averages from the given array of stock indices.
+    :param stock_idx: A 1-D array containing the values of a stock index
+    :type stock_idx: numpy.ndarray
+    :return moving_avg: A 1-D array containing the 3-day simple moving averages
+    :rtype: numpy.ndarray
+    """
+    stock_idx = np.array(stock_idx)
+    num_days = len(stock_idx)
+    moving_avg = np.zeros(num_days - 2)
+    moving_avg[:] = (stock_idx[:-2] + stock_idx[1:-1] + stock_idx[2:]) / 3
+
+    return moving_avg
+
+# Task 6:
+def plot_template(indices):
+    """
+    Set up a template for plotting stock index data with a three-day moving average
+    :param indices: The name of the stock index for which the plot is being created.
+    :type indices: str
+    :return: none
+    This function sets up the title and labels for the plot
+    """
+    plt.title('Three-Day Moving Average of ' + indices)
+    plt.xlabel('Trading Days since Jun 1, 2016')
+    plt.ylabel('Moving Average of Index')
+
+
+
+# Plot for DJIA
+plot_template('DJIA')
+plt.plot(DAYS[2:], moving_average(DJIA), label='MA', color='blue')
+plt.plot(DAYS[2:], DJIA[2:], label='Non-MA', color='green')
+plt.legend(loc='best')
+plt.savefig('HW2 Task 6 - DJIA')
+plt.close()
+
+# Plot for S&P 500
+plot_template('S&P 500')
+plt.plot(DAYS[2:], moving_average(STOCKS_SP_), label='MA', color='purple')
+plt.plot(DAYS[2:], STOCKS_SP_[2:], label='Non-MA', color='orange')
+plt.legend(loc='best')
+plt.savefig('HW2 Task 6 - S&P 500')
+plt.close()
+
+
+# Plot for NASDAQ
+plot_template('NASDAQ')
+plt.plot(DAYS[2:], moving_average(STOCKS_NASDAQ), label='MA', color='red')
+plt.plot(DAYS[2:], STOCKS_NASDAQ[2:], label='Non-MA', color='black')
+plt.legend(loc='best')
+plt.savefig('HW2 Task 6 - NASDAQ')
+plt.close()
+
 
