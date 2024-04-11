@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy as sp
 
+# Import stocks data from the stocks module
 import stocks
 
 STOCKS_NASDAQ = stocks.nasdaq
@@ -35,7 +35,7 @@ def percent_of_mean(stock_idx):
     return percent_vals
 
 
-# Task 2:
+# Task 2: Plotting the percentage of each stock index relative to the mean.
 plt.plot(DAYS, percent_of_mean(DJIA), label="DJIA", color='blue')
 plt.plot(DAYS, percent_of_mean(STOCKS_SP_), label="S&P500", color='green')
 plt.plot(DAYS, percent_of_mean(STOCKS_NASDAQ), label="NASDAQ", color='red')
@@ -49,7 +49,7 @@ plt.savefig('HW2 Task 2 Plot')
 plt.close()
 
 
-# Task 3:
+# Task 3: Calculate the number of days with a big percentage change.
 def num_days_big_percent_chg(stock_idx, percent):
     """
     Calculate the number of trading days when the magnitude of percent change since the previous day is greater than
@@ -69,7 +69,8 @@ def num_days_big_percent_chg(stock_idx, percent):
     num_days = np.sum(percent_changes > percent)
     return num_days
 
-# Task 4:
+
+# Task 4: Plotting the number of days with big percentage changes for different thresholds.
 pct_chg_thresholds = [0.2, 0.4, 0.6, 0.8, 1.0]
 djia_pct_chg_days = []
 sp500_pct_chg_days = []
@@ -89,7 +90,8 @@ plt.legend(loc='best')
 plt.savefig('HW2 Task 4 Plot')
 plt.close()
 
-# Task 5:
+
+# Task 5: Calculate the 3-day simple moving average of a stock index.
 def moving_average(stock_idx):
     """
     Generates a 1-D array containing the 3-day simple moving averages from the given array of stock indices.
@@ -99,13 +101,22 @@ def moving_average(stock_idx):
     :rtype: numpy.ndarray
     """
     stock_idx = np.array(stock_idx)
+    # Take the length of the original stock_idx array
     num_days = len(stock_idx)
+    # Create the array 'moving_avg' that's 2 elements shorter than the original stock_idx array
     moving_avg = np.zeros(num_days - 2)
+    # Calculate the 3-day simple moving average for each element in the stock index array. Slicing the array to
+    # exclude the first and last two elements to ensure a 3-day window for the moving average calculation:
+    # - stock_idx[:-2]: All elements except the last two.
+    # - stock_idx[1:-1]: All elements except the first and last.
+    # - stock_idx[2:]: All elements except the first two. Add corresponding elements from the sliced arrays and divide
+    # by 3 to get the average.
     moving_avg[:] = (stock_idx[:-2] + stock_idx[1:-1] + stock_idx[2:]) / 3
 
     return moving_avg
 
-# Task 6:
+
+# Task 6: Plotting the stock index and its 3-day moving average.
 def plot_template(indices):
     """
     Set up a template for plotting stock index data with a three-day moving average
@@ -117,7 +128,6 @@ def plot_template(indices):
     plt.title('Three-Day Moving Average of ' + indices)
     plt.xlabel('Trading Days since Jun 1, 2016')
     plt.ylabel('Moving Average of Index')
-
 
 
 # Plot for DJIA
@@ -136,7 +146,6 @@ plt.legend(loc='best')
 plt.savefig('HW2 Task 6 - S&P 500')
 plt.close()
 
-
 # Plot for NASDAQ
 plot_template('NASDAQ')
 plt.plot(DAYS[2:], moving_average(STOCKS_NASDAQ), label='MA', color='red')
@@ -144,5 +153,3 @@ plt.plot(DAYS[2:], STOCKS_NASDAQ[2:], label='Non-MA', color='black')
 plt.legend(loc='best')
 plt.savefig('HW2 Task 6 - NASDAQ')
 plt.close()
-
-
